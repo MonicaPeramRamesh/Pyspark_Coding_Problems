@@ -1,0 +1,27 @@
+Given a DataFrame with columns [name, age, city], add a new column "senior" which is True if age >= 60, using the when/otherwise function.
+
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql.functions import col, when
+
+# Define schema
+schema = StructType([
+    StructField("name", StringType(), True),
+    StructField("age", IntegerType(), True),
+    StructField("city", StringType(), True)
+])
+
+# Data
+data = [
+    ("Monica", 24, "NY"),
+    ("Shiva", 25, "LA"),
+    ("Ravi", 63, "NY")
+]
+
+# Create DataFrame
+df = spark.createDataFrame(data, schema)
+
+# Add 'senior' column based on age >= 60
+df = df.withColumn("senior", when(col("age") >= 60, True).otherwise(False))
+
+# Show the result
+df.show()
