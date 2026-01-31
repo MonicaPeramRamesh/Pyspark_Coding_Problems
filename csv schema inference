@@ -1,0 +1,9 @@
+Read a CSV file into a DataFrame with automatic schema inference, then display the schema and row count.
+
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+df = spark.read.format('csv').option('delimiter',',').option('header',True).option('inferSchema',True).load('/Volumes/dlt_catalog/default/employee_details/employees.csv')
+df.printSchema()
+
+df.count()
