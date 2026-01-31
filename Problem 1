@@ -1,0 +1,27 @@
+Create a DataFrame from a list of tuples with a defined schema, then filter rows where salary > 50000 and select only name and department columns.
+
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql.functions import col
+
+# Define schema
+schema = StructType([
+    StructField("id", IntegerType(), True),
+    StructField("name", StringType(), True),
+    StructField("salary", IntegerType(), True),
+    StructField("department", StringType(), True)
+])
+
+# Data
+data = [
+    (1, "Monica", 30000, "HR"),
+    (2, "Shiva", 80000, "IT")
+]
+
+# Create DataFrame
+df = spark.createDataFrame(data, schema)
+
+# Filter and select
+result_df = df.filter(col("salary") > 50000) \
+               .select("name", "department")
+
+display(result_df)
