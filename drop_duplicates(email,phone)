@@ -1,0 +1,6 @@
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+df = spark.read.option('header', True).csv('/Volumes/dlt_catalog/default/student/users.csv')
+df = df.dropDuplicates(['email','phone'])
+display(df)
