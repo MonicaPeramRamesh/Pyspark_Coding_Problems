@@ -1,0 +1,13 @@
+Group by department and calculate average, min, max salary
+
+from pyspark.sql.types import * 
+from pyspark.sql.functions import * 
+
+data = [("Monica",25,50000,"DataEngineer"),("Pragathi",31,100000,"JavaDeveloper"),("Veera",32,1500000,"JavaDeveloper"),("Shiva",25,100000,"DataEngineer"),
+("sathya",25,899999,"JavaDeveloper")] 
+schema = ["name","age","salary","department"] 
+df = spark.createDataFrame(data,schema) 
+display(df) 
+
+df1 = df.groupBy("department").agg(max(col("salary")).alias("max_salary"),min(col("salary")).alias("min_salary"),avg(col("salary")).alias("average_salary")).orderBy(desc("department")) 
+display(df1)
