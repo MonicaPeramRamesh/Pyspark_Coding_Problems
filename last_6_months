@@ -1,0 +1,17 @@
+Filter records for last 6 months using date functions
+
+from pyspark.sql.types import * 
+from pyspark.sql.functions import * 
+from datetime import datetime 
+from zoneinfo import ZoneInfo 
+from pyspark.sql.functions import col, current_date 
+
+data = [("Monica",25,50000,"DataEngineer","2025-02-02"),("Pragathi",31,100000,"JavaDeveloper","2024-01-20"),("Veera",32,1500000,"JavaDeveloper","2026-02-01"),
+("Shiva",25,100000,"DataEngineer","2026-02-07"),("sathya",25,899999,"JavaDeveloper","2024-02-01")] 
+schema = ["name","age","salary","department","doj"] 
+df = spark.createDataFrame(data,schema) 
+display(df) 
+
+df = df.withColumn("doj", to_date("doj", "yyyy-MM-dd")) 
+df = df.filter(col("doj") >= add_months(current_date(), -6)) 
+display(df)
