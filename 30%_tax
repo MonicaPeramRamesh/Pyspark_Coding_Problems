@@ -1,0 +1,14 @@
+Add a new column 'tax' as 30% of salary and write to Parquet format
+
+from pyspark.sql.types import * 
+from pyspark.sql.functions import * 
+
+data = [("Monica",25,50000),("Pragathi",31,100000),("Veera",32,1500000)] 
+schema = ["name","age","salary"] 
+
+df = spark.createDataFrame(data,schema) 
+df = df.withColumn("tax", col("salary")*(30/100)) 
+display(df) 
+
+path = dbutils.secrets.get(scope="foa-kv-scope",key="foa-mount-path")+"/inbound/test/" 
+df.coalesce(1).write.format("parquet").mode("overwrite").option("header",True).option("delimiter",';').save(path)
