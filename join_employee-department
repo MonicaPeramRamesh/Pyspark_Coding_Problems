@@ -1,0 +1,33 @@
+Given two DataFrames — employees and departments — perform an inner join on department_id and select employee name and department name.
+
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+
+# Employees DataFrame
+emp_data = [
+    (1, "Alice", 101),
+    (2, "Bob", 102),
+    (3, "Charlie", 103),
+    (4, "David", 101)
+]
+
+emp_columns = ["emp_id", "emp_name", "department_id"]
+
+employees = spark.createDataFrame(emp_data, emp_columns)
+
+# Departments DataFrame
+dept_data = [
+    (101, "HR"),
+    (102, "IT"),
+    (103, "Finance"),
+    (104, "Marketing")
+]
+
+dept_columns = ["department_id", "department_name"]
+
+departments = spark.createDataFrame(dept_data, dept_columns)
+
+df = employees.join(departments, on =  employees.department_id == departments.department_id, how = "inner").select("emp_name","department_name")
+
+display(df)
