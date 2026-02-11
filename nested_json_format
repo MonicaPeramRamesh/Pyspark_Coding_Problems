@@ -1,0 +1,18 @@
+Read a JSON file into a DataFrame where each row contains a nested struct (e.g., address.city, address.zip). Flatten the nested columns into top-level columns.
+
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+schema = StructType([
+    StructField("id",IntegerType(),True),
+    StructField("name",StringType(),True),
+    StructField("address",StructType([
+        StructField("city",StringType(),True),
+        StructField("zip",StringType(),True)
+    ]),True)
+])
+
+df = spark.read.format("json").schema(schema).load("/Volumes/dlt_catalog/default/student/sales/employee_details.json")
+
+df = df.select("id","name",col("address.city").alias("city"),col("address.zip").alias("zip"))
+display(df)
