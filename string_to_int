@@ -1,0 +1,19 @@
+Create a DataFrame, rename columns using withColumnRenamed, and then cast the "age" column from string to integer.
+
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+schema = StructType([
+    StructField("name",StringType(),True),
+    StructField("age",StringType(),True),
+    StructField("city",StringType(),True)
+])
+data = [("Monica",24,"NY"),
+        ("Shiva",25,"LA"),
+        ("Ravi",63,"NY")]
+df = spark.createDataFrame(data,schema)
+
+df = df.withColumnRenamed("age", "current_age")
+df = df.withColumn("current_age",col("current_age").cast("int"))
+
+display(df)
