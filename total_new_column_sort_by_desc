@@ -1,0 +1,25 @@
+Given a DataFrame with columns [product, price, quantity], create a new column "total" = price * quantity, then sort by total in descending order.
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+# Initialize Spark session
+spark = SparkSession.builder.appName("ProductData").getOrCreate()
+
+# Sample data
+data = [
+    ("Apple", 2.5, 10),
+    ("Banana", 1.2, 20),
+    ("Cherry", 3.0, 15),
+    ("Date", 5.0, 5),
+    ("Elderberry", 8.0, 7)
+]
+
+# Create DataFrame
+columns = ["product", "price", "quantity"]
+df = spark.createDataFrame(data, columns)
+
+df = df.withColumn("total",col("price") * col("quantity"))
+
+df = df.orderBy(col("total").desc())
+display(df)
