@@ -1,0 +1,25 @@
+Write a PySpark code to replace all null values in a string column with "Unknown" and in a numeric column with 0.
+
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+# Sample data for students
+students_data = [
+    (1, "John Doe", 20, "Computer Science", "9876543210", "john.doe@example.com"),
+    (2, "Alice Smith", None, "Mathematics", None, "alice.smith@example.com"),
+    (3, "Bob Brown", 22, "Physics", "9123456789", None),
+    (4, "Charlie Davis", 21, "Chemistry", None, "charlie.davis@example.com"),
+    (5, "Diana Green", None, "Biology", "9988776655", None),
+    (6, "Eva White", 19, "Electrical Engineering", "9445566777", "eva.white@example.com"),
+    (7, "Frank Black", None, "Mechanical Engineering", None, None),
+    (8, "Grace Lee", 23, "Civil Engineering", "9112233445", "grace.lee@example.com"),
+    (9, "Harry Wilson", 24, "Architecture", None, "harry.wilson@example.com"),
+    (10, "Ivy Clarke", 21, "Mathematics", "9777888999", None)
+]
+
+students_columns = ["student_id", "name", "age", "department", "mobile_number", "email_id"]
+
+students_df = spark.createDataFrame(students_data, students_columns)
+
+students_df = students_df.withColumn("age", when(col('age').isNull() , 0 ).otherwise(col('age'))).withColumn("mobile_number", when (col('mobile_number').isNull(), 'Unknown').otherwise(col('mobile_number'))).withColumn('email_id',when(col('email_id').isNull(),'Unknown').otherwise(col('email_id')))
+display(students_df)
